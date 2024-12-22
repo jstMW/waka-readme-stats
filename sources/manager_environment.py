@@ -4,7 +4,7 @@ from os import getenv, environ
 class EnvironmentManager:
     """
     Class for handling all environmental variables used by the action.
-    There are only two required variables: `INPUT_GH_TOKEN` and `INPUT_WAKATIME_API_KEY`.
+    There are only three required variables: `INPUT_GH_TOKEN` and `INPUT_WAKATIME_API_KEY` and `INPUT_WAKATIME_URL`.
     The others have a provided default value.
     For all boolean variables a 'truthy'-list is checked (not only true/false, but also 1, t, y and yes are accepted).
     List variable `IGNORED_REPOS` is split and parsed.
