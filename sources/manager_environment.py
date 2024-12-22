@@ -21,10 +21,10 @@ class EnvironmentManager:
     PULL_BRANCH_NAME = getenv("INPUT_PULL_BRANCH_NAME", "")
     PUSH_BRANCH_NAME = getenv("INPUT_PUSH_BRANCH_NAME", "")
 
-    SHOW_OS = getenv("INPUT_SHOW_OS", "False").lower() in _TRUTHY
+    #SHOW_OS = getenv("INPUT_SHOW_OS", "False").lower() in _TRUTHY
     SHOW_PROJECTS = getenv("INPUT_SHOW_PROJECTS", "True").lower() in _TRUTHY
     SHOW_EDITORS = getenv("INPUT_SHOW_EDITORS", "True").lower() in _TRUTHY
-    SHOW_TIMEZONE = getenv("INPUT_SHOW_TIMEZONE", "True").lower() in _TRUTHY
+    #SHOW_TIMEZONE = getenv("INPUT_SHOW_TIMEZONE", "True").lower() in _TRUTHY
     SHOW_COMMIT = getenv("INPUT_SHOW_COMMIT", "True").lower() in _TRUTHY
     SHOW_LANGUAGE = getenv("INPUT_SHOW_LANGUAGE", "True").lower() in _TRUTHY
     SHOW_LINES_OF_CODE = getenv("INPUT_SHOW_LINES_OF_CODE", "False").lower() in _TRUTHY
