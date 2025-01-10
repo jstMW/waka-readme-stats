@@ -1,3 +1,9 @@
+## My_changes?
+- I add the WAKAPI_URL in the environment vars ** you have to add it to github secrets **
+- I also modify the url (to be compatible with wakapi) and add header for authentication
+- At the end a great thanks to the original Author :)
+
+
 > Looking For Translation to different languages & Locale  [#23](https://github.com/anmol098/waka-readme-stats/issues/23)
 
 # Dev Metrics in Readme with added feature flags 🎌
