@@ -128,12 +128,12 @@ async def init_download_manager(user_login: str):
         linguist="https://cdn.jsdelivr.net/gh/github/linguist@master/lib/linguist/languages.yml",
         # waka_latest=f"EM.{WAKATIME_URL}/api/v1/users/current/stats/last_7_days?api_key={EM.WAKATIME_API_KEY}",
         waka_latest=f"{EM.
-                       WAKATIME_URL}/compat/wakatime/v1/users/current/stats/last_7_days",
+                       WAKATIME_URL}/compat/wakatime/v1/users/{EM.WAKATIME_USER}/stats/last_7_days",
 
 
         # waka_all=f"EM.{WAKATIME_URL}/api/v1/users/cu/rrent/all_time_since_today?api_key={EM.WAKATIME_API_KEY}",
         waka_all=f"{
-            EM.WAKATIME_URL}/compat/wakatime/v1/users/current/all_time_since_today?",
+            EM.WAKATIME_URL}/compat/wakatime/v1/users/{EM.WAKATIME_USER}/all_time_since_today?",
         github_stats=f"https://github-contributions.vercel.app/api/v1/{
             user_login}",
     )
