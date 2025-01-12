@@ -36,7 +36,8 @@ async def get_waka_time_stats(repositories: Dict, commit_dates: Dict) -> str:
         return stats
     if EM.SHOW_COMMIT or EM.SHOW_DAYS_OF_WEEK:  # if any on flag is turned on then we need to calculate the data and print accordingly
         DBM.i("Adding user commit day time info...")
-        stats += f"{await make_commit_day_time_list(data['data']['timezone'], repositories, commit_dates)}\n\n"
+        timezone = "America/Chicago"
+        stats += f"{await make_commit_day_time_list(timezone , repositories, commit_dates)}\n\n"
 
     if EM.SHOW_TIMEZONE or EM.SHOW_LANGUAGE or EM.SHOW_EDITORS or EM.SHOW_PROJECTS or EM.SHOW_OS:
         no_activity = FM.t("No Activity Tracked This Week")
@@ -170,7 +171,7 @@ async def get_stats() -> str:
         if data is None:
             DBM.p("WakaTime data unavailable!")
         else:
-            stats += f"![Code Time](http://img.shields.io/badge/{quote('Code Time')}-{quote(str(data['data']['text']))}-blue)\n\n"
+            stats += f"![Code Time](http://img.shields.io/badge/{quote('Code Time')}-{quote(str(data['data']['human_readable_total']))}-blue)\n\n"
 
     if EM.SHOW_PROFILE_VIEWS:
         DBM.i("Adding profile views info...")

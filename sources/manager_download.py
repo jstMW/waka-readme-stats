@@ -127,15 +127,12 @@ async def init_download_manager(user_login: str):
     await DownloadManager.load_remote_resources(
         linguist="https://cdn.jsdelivr.net/gh/github/linguist@master/lib/linguist/languages.yml",
         # waka_latest=f"EM.{WAKATIME_URL}/api/v1/users/current/stats/last_7_days?api_key={EM.WAKATIME_API_KEY}",
-        waka_latest=f"{EM.
-                       WAKATIME_URL}/compat/wakatime/v1/users/{EM.WAKATIME_USER}/stats/last_7_days",
+        waka_latest=f"{EM.WAKAPI_URL}/compat/wakatime/v1/users/{EM.WAKAPI_USER}/stats/last_7_days",
 
 
         # waka_all=f"EM.{WAKATIME_URL}/api/v1/users/cu/rrent/all_time_since_today?api_key={EM.WAKATIME_API_KEY}",
-        waka_all=f"{
-            EM.WAKATIME_URL}/compat/wakatime/v1/users/{EM.WAKATIME_USER}/all_time_since_today?",
-        github_stats=f"https://github-contributions.vercel.app/api/v1/{
-            user_login}",
+        waka_all=f"{EM.WAKAPI_URL}/compat/wakatime/v1/users/{EM.WAKAPI_USER}/stats/all_time",
+        github_stats=f"https://github-contributions.vercel.app/api/v1/{user_login}",
     )
 
 
@@ -160,17 +157,18 @@ class DownloadManager:
         Prepare DownloadManager to launch GitHub API queries and launch all static queries.
         :param resources: Static queries, formatted like "IDENTIFIER"="URL".
         """
-        base64_apikey = base64.base64_b64encode(EM.WAKATIME_API_KEY)
-        wakapi_header = f"Authorization: Basic {base64_apikey}"
+        api_as_byte_array = bytes(f"{EM.WAKAPI_API_KEY}", 'utf-8')
+        base64_apikey = base64.b64encode(api_as_byte_array)
+        token_wakapi = f"Basic {base64_apikey.decode('utf-8')}"
 
+        wakapi_auth_header = {"Authorization": token_wakapi}
+	
         for resource, url in resources.items():
             # I know not efficient just wanna make it work for now!
             if "wakatime" in url:
-                DownloadManager._REMOTE_RESOURCES_CACHE[resource] = DownloadManager._client.get(
-                    url, wakapi_header)
+                DownloadManager._REMOTE_RESOURCES_CACHE[resource] = DownloadManager._client.get(url, headers=wakapi_auth_header)
             else:
-                DownloadManager._REMOTE_RESOURCES_CACHE[resource] = DownloadManager._client.get(
-                    url)
+                DownloadManager._REMOTE_RESOURCES_CACHE[resource] = DownloadManager._client.get(url)
 
     @staticmethod
     async def close_remote_resources():
@@ -215,8 +213,7 @@ class DownloadManager:
             DBM.w(f"\tQuery '{resource}' returned 202 status code")
             return None
         else:
-            raise Exception(f"Query '{res.url}' failed to run by returning code of {
-                            res.status_code}: {res.json()}")
+            raise Exception(f"Query '{res.url}' failed to run by returning code of {res.status_code}: {res.json()}")
 
     @staticmethod
     async def get_remote_json(resource: str) -> Dict or None:
@@ -254,9 +251,9 @@ class DownloadManager:
         elif res.status_code == 502 and retries_count > 0:
             return await DownloadManager._fetch_graphql_query(query, retries_count - 1, **kwargs)
         else:
-            raise Exception(f"Query '{query}' failed to run by returning code of {
-                            res.status_code}: {res.json()}")
+            raise Exception(f"Query '{query}' failed to run by returning code of {res.status_code}: {res.json()}")
 
+                            
     @staticmethod
     def _find_pagination_and_data_list(response: Dict) -> Tuple[List, Dict]:
         """
@@ -297,8 +294,7 @@ class DownloadManager:
         while page_info["hasNextPage"]:
             pagination = f'first: 100, after: "{page_info["endCursor"]}"'
             query_response = await DownloadManager._fetch_graphql_query(query, **kwargs, pagination=pagination)
-            new_page_list, page_info = DownloadManager._find_pagination_and_data_list(
-                query_response)
+            new_page_list, page_info = DownloadManager._find_pagination_and_data_list(query_response)
             page_list += new_page_list
         return page_list
 
@@ -314,8 +310,7 @@ class DownloadManager:
         :param kwargs: Parameters for substitution of variables in dynamic query.
         :return: Response JSON dictionary.
         """
-        key = f"{query}_{
-            md5(dumps(kwargs, sort_keys=True).encode('utf-8')).digest()}"
+        key = f"{query}_{md5(dumps(kwargs, sort_keys=True).encode('utf-8')).digest()}"
         if key not in DownloadManager._REMOTE_RESOURCES_CACHE:
             if "$pagination" in GITHUB_API_QUERIES[query]:
                 res = await DownloadManager._fetch_graphql_paginated(query, **kwargs)
