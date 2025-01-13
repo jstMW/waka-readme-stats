@@ -1,6 +1,11 @@
 ## My_changes?
-- I add the WAKAPI_URL in the environment vars ** you have to add it to github secrets **
-- I also modify the url (to be compatible with wakapi) and add header for authentication
+- I add the WAKAPI_URL in the environment vars **you have to add it to github secrets**
+- I also modified url **that used internally** (to be compatible with wakapi) and add header for authentication
+- in summary should add:
+    - WAKAPI_USER
+    - WAKAPI_API_KEY
+    - WAKAPI_URL
+    - GH_TOKEN
 - At the end a great thanks to the original Author :)
 
 
