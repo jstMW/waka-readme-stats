@@ -5,6 +5,7 @@
     - WAKAPI_USER
     - WAKAPI_API_KEY
     - WAKAPI_URL
+      - for url, you should add /api at the end though I'm lazy to modify the source again :( if you like go a head and browse the source code and make your changes. It's a great learning practice.
     - GH_TOKEN
 - At the end a great thanks to the original Author :)
 
